@@ -10,7 +10,7 @@ $(function () {
         data: null
     };
     function creatDatabase (dname, dversion) {
-        var request = window.indexDB.open(dname, dversion);
+        var request = window.indexedDB.open(dname, dversion);
         request.onerror = function (e) {
             console.log('database error: ', e);
         };
