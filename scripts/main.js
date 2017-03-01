@@ -5,8 +5,8 @@
 ;
 $(function () {
     window.myDB = {
-        name: 'dbTest',
-        version: 3,
+        name: 'dbtest',
+        version: 1,
         dbStore: null
     };
     const customerData = [
