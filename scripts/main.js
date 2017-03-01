@@ -5,8 +5,8 @@
 ;
 $(function () {
     window.myDB = {
-        name: 'test',
-        version: '1.0',
+        name: 'dbTest',
+        version: 1,
         data: null
     };
     function creatDatabase (dbName, dbVersion) {
