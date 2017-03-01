@@ -4,23 +4,32 @@
 
 ;
 $(function () {
-    var myDB = {
+    window.myDB = {
         name: 'test',
         version: '1.0',
         data: null
     };
-    function creatDatabase (dname, dversion) {
-        var request = window.indexedDB.open(dname, dversion);
-        request.onerror = function (e) {
+    function creatDatabase (dbName, dbVersion) {
+        var dbRequest = window.indexedDB.open(dbName, dbVersion);
+        dbRequest.onerror = function (e) {
             console.log('database error: ', e);
         };
-        request.onsuccess = function () {
-            console.log('database success!');
-            myDB.data = request.result
+        dbRequest.onsuccess = function (e) {
+            console.log('database success!', e);
+            window.myDB.data = dbRequest.result
         };
-        request.onupgradeneeded = function () {
-            console.log('database version changed to: ' + dversion);
+        dbRequest.onupgradeneeded = function (e) {
+            console.log('database version changed to: ' + dbVersion, e);
         };
     }
-    creatDatabase(myDB.name, myDB.version);
+    function deleteDatabase (dbName) {
+        var deleteDbRequest = indexedDB.deleteDatabase(dbName);
+        deleteDbRequest.onsuccess = function (e) {
+            console.log('delete database success!', e);
+        };
+        deleteDbRequest.onerror = function (e) {
+            console.log('database delete error!', e);
+        };
+    }
+    creatDatabase(window.myDB.name, window.myDB.version);
 });
