@@ -22,23 +22,20 @@ $(function () {
             console.log('database success!', e);
             window.myDB.dbStore = this.result;
             //////////////////////////////////
-            setTimeout(function () {
-                var transaction = window.myDB.dbStore.transaction(dbName, 'readwrite');
-                transaction.oncomplete = function () {
-                    alert('ok');
+            var transaction = window.myDB.dbStore.transaction('customers', 'readwrite');
+            transaction.oncomplete = function () {
+                alert('ok');
+            };
+            transaction.onerror = function (e) {
+                alert('error');
+            };
+            var objectStore = transaction.objectStore('customers');
+            customerData.forEach(function (item, idx) {
+                var req = objectStore.add(item);
+                req.onsuccess = function () {
+                    alert('okok');
                 };
-                transaction.onerror = function (e) {
-                    alert('error');
-                };
-                var objectStore = transaction.objectStore(dbName);
-                customerData.forEach(function (item, idx) {
-                    var req = objectStore.add(item);
-                    req.onsuccess = function () {
-                        alert('okok');
-                    };
-                });
-            }, 500);
-
+            });
         };
         dbRequest.onupgradeneeded = function (e) {
             console.log('database version changed to: ' + dbVersion, e);
