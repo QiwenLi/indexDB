@@ -7,7 +7,7 @@ $(function () {
     window.myDB = {
         name: 'dbTest',
         version: 3,
-        data: null
+        dbStore: null
     };
     const customerData = [
         { ssn: "444-44-4444", name: "Bill", age: 35, email: "bill@company.com" },
@@ -20,7 +20,22 @@ $(function () {
         };
         dbRequest.onsuccess = function (e) {
             console.log('database success!', e);
-            window.myDB.data = dbRequest.result
+            window.myDB.dbStore = this.result;
+            //////////////////////////////////
+            var transaction = window.myDB.dbStore.transaction(window.myDB.name, 'readwrite');
+            transaction.oncomplete = function () {
+                alert('ok');
+            };
+            transaction.onerror = function (e) {
+                alert('error');
+            };
+            var objectStore = transaction.objectStore(window.myDB.name);
+            customerData.forEach(function (item, idx) {
+                var req = objectStore.add(item);
+                req.onsuccess = function () {
+                    alert('okok');
+                };
+            });
         };
         dbRequest.onupgradeneeded = function (e) {
             console.log('database version changed to: ' + dbVersion, e);
@@ -28,9 +43,6 @@ $(function () {
             var objectStore = db.createObjectStore('customers', {keyPath: 'ssn'});
             objectStore.createIndex('name', 'name', {unique: false});
             objectStore.createIndex('email', 'email', {unique: true});
-            for (var i in customerData) {
-                objectStore.add(customerData[i]);
-            }
         };
     }
     function deleteDatabase (dbName) {
