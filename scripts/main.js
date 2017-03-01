@@ -22,14 +22,14 @@ $(function () {
             console.log('database success!', e);
             window.myDB.dbStore = this.result;
             //////////////////////////////////
-            var transaction = window.myDB.dbStore.transaction(window.myDB.name, 'readwrite');
+            var transaction = window.myDB.dbStore.transaction(dbName, 'readwrite');
             transaction.oncomplete = function () {
                 alert('ok');
             };
             transaction.onerror = function (e) {
                 alert('error');
             };
-            var objectStore = transaction.objectStore(window.myDB.name);
+            var objectStore = transaction.objectStore(dbName);
             customerData.forEach(function (item, idx) {
                 var req = objectStore.add(item);
                 req.onsuccess = function () {
