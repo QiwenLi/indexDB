@@ -6,7 +6,7 @@
 $(function () {
     window.myDB = {
         name: 'dbTest',
-        version: 2,
+        version: 3,
         data: null
     };
     const customerData = [
@@ -28,7 +28,9 @@ $(function () {
             var objectStore = db.createObjectStore('customers', {keyPath: 'ssn'});
             objectStore.createIndex('name', 'name', {unique: false});
             objectStore.createIndex('email', 'email', {unique: true});
-            objectStore.add(customerData[i]);
+            for (var i in customerData) {
+                objectStore.add(customerData[i]);
+            }
         };
     }
     function deleteDatabase (dbName) {
