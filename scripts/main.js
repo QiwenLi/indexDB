@@ -9,6 +9,10 @@ $(function () {
         version: 1,
         data: null
     };
+    const customerData = [
+        { ssn: "444-44-4444", name: "Bill", age: 35, email: "bill@company.com" },
+        { ssn: "555-55-5555", name: "Donna", age: 32, email: "donna@home.org" }
+    ];
     function creatDatabase (dbName, dbVersion) {
         var dbRequest = window.indexedDB.open(dbName, dbVersion);
         dbRequest.onerror = function (e) {
@@ -20,6 +24,11 @@ $(function () {
         };
         dbRequest.onupgradeneeded = function (e) {
             console.log('database version changed to: ' + dbVersion, e);
+            var db = e.target.result;
+            var objectStore = db.createObjectStore('customers', {keyPath: 'ssn'});
+            objectStore.createIndex('name', 'name', {unique: false});
+            objectStore.createIndex('email', 'email', {unique: true});
+            objectStore.add(customerData[i]);
         };
     }
     function deleteDatabase (dbName) {
